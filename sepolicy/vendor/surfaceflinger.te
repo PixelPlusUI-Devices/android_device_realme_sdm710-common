@@ -1,2 +1,4 @@
 allow surfaceflinger firmware_file:dir { search };
 allow surfaceflinger vfat:dir search;
+
+binder_call(surfaceflinger, hal_power_default);
