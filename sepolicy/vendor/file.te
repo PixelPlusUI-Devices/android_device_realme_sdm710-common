@@ -25,3 +25,6 @@ type sysfs_kcal, fs_type, sysfs_type;
 
 # FPS
 type sysfs_fps, sysfs_type, fs_type;
+
+# Kernelspace Batter saver
+type sysfs_battery_saver, fs_type, sysfs_type;
