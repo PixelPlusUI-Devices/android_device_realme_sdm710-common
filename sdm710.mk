@@ -403,7 +403,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     vendor/qcom/opensource/commonsys-intf/display \
-    vendor/qcom/opensource/wfd-commonsys
+    vendor/qcom/opensource/wfd-commonsys \
+    hardware/google/interfaces \
+    hardware/google/pixel
+
+# Speed profile services and wifi-service to reduce RAM and storage.
+PRODUCT_SYSTEM_SERVER_COMPILER_FILTER := speed-profile
 
 # Telephony
 PRODUCT_PACKAGES += \
