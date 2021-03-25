@@ -19,3 +19,5 @@ allow init sysfs_mmc_host:file { open write };
 allow init update_engine_exec:process { sigkill transition };
 allow init hwservicemanager:binder { call transfer };
 allow init vfat:dir search;
+
+set_prop(init, vendor_power_prop)
