@@ -15,6 +15,7 @@ ro.sf.blurs_are_expensive=1
 ro.sys.fw.dex2oat_thread_count=8
 
 # IORap
+iorapd.perfetto.enable=true
 iorapd.readahead.enable=true
 ro.iorapd.enable=true
 
