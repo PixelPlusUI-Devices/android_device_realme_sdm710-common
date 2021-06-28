@@ -54,6 +54,7 @@ on init
     write /dev/stune/top-app/schedtune.prefer_idle 1
 
     # Setup permission for Power HAL
+    chown system system /dev/cpu_dma_latency
     chown system system /dev/stune/top-app/schedtune.boost
     chown system system /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
     chown system system /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
@@ -66,6 +67,7 @@ on init
     chown system system /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/hist_memory
     chown system system /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/hyst_length
 
+    chmod 0664 /dev/cpu_dma_latency
     chmod 0664 /dev/stune/top-app/schedtune.boost
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
