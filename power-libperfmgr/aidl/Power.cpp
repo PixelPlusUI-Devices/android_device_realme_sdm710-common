@@ -139,18 +139,15 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
             }
             break;
         case Mode::SUSTAINED_PERFORMANCE:
-            if (enabled && !mSustainedPerfModeOn) {
+            if (enabled) {
+                endAllHints(mHintManager);
                 mHintManager->DoHint("SUSTAINED_PERFORMANCE");
-                mSustainedPerfModeOn = true;
-            } else if (!enabled && mSustainedPerfModeOn) {
+            } else {
                 mHintManager->EndHint("SUSTAINED_PERFORMANCE");
-                mSustainedPerfModeOn = false;
             }
+            mSustainedPerfModeOn = enabled;
             break;
         case Mode::LAUNCH:
-            if (mSustainedPerfModeOn) {
-                break;
-            }
             [[fallthrough]];
         case Mode::FIXED_PERFORMANCE:
             [[fallthrough]];
@@ -173,7 +170,9 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
         case Mode::CAMERA_STREAMING_HIGH:
             [[fallthrough]];
         default:
-            if (mBatterySaverOn) break;
+            if (mBatterySaverOn || mSustainedPerfModeOn) {
+                break;
+            }
             if (enabled) {
                 mHintManager->DoHint(toString(type));
             } else {
