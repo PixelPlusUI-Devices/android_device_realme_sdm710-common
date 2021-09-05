@@ -53,6 +53,7 @@ Power::Power(std::shared_ptr<HintManager> hm)
     : mHintManager(hm),
       mInteractionHandler(nullptr),
       mSustainedPerfModeOn(false),
+      mBatterySaverOn(false),
       mAdpfRateNs(
               ::android::base::GetIntProperty(kPowerHalAdpfRateProp, kPowerHalAdpfRateDefault)) {
     mInteractionHandler = std::make_unique<InteractionHandler>(mHintManager);
@@ -109,6 +110,12 @@ static int sysfs_write(const char *path, const char *s)
     return ret;
 }
 
+void endAllHints(std::shared_ptr<HintManager> mHintManager) {
+    for (std::string hint: mHintManager->GetHints()) {
+        mHintManager->EndHint(hint);
+    }
+}
+
 ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
     LOG(DEBUG) << "Power setMode: " << toString(type) << " to: " << enabled;
     ATRACE_INT(toString(type).c_str(), enabled);
@@ -122,6 +129,13 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
         case Mode::LOW_POWER:
             {
             sysfs_write("/sys/module/battery_saver/parameters/enabled", enabled ? "Y" : "N");
+            if (enabled) {
+                endAllHints(mHintManager);
+                mHintManager->DoHint("LOW_POWER");
+            } else {
+                mHintManager->EndHint("LOW_POWER");
+            }
+            mBatterySaverOn = enabled;
             }
             break;
         case Mode::SUSTAINED_PERFORMANCE:
@@ -159,6 +173,7 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
         case Mode::CAMERA_STREAMING_HIGH:
             [[fallthrough]];
         default:
+            if (mBatterySaverOn) break;
             if (enabled) {
                 mHintManager->DoHint(toString(type));
             } else {
@@ -186,7 +201,7 @@ ndk::ScopedAStatus Power::setBoost(Boost type, int32_t durationMs) {
     ATRACE_INT(toString(type).c_str(), durationMs);
     switch (type) {
         case Boost::INTERACTION:
-            if (mSustainedPerfModeOn) {
+            if (mSustainedPerfModeOn || mBatterySaverOn) {
                 break;
             }
             mInteractionHandler->Acquire(durationMs);
@@ -202,7 +217,7 @@ ndk::ScopedAStatus Power::setBoost(Boost type, int32_t durationMs) {
         case Boost::CAMERA_SHOT:
             [[fallthrough]];
         default:
-            if (mSustainedPerfModeOn) {
+            if (mSustainedPerfModeOn || mBatterySaverOn) {
                 break;
             }
             if (durationMs > 0) {
@@ -260,9 +275,11 @@ constexpr const char *boolToString(bool b) {
 binder_status_t Power::dump(int fd, const char **, uint32_t) {
     std::string buf(::android::base::StringPrintf(
             "HintManager Running: %s\n"
-            "SustainedPerformanceMode: %s\n",
+            "SustainedPerformanceMode: %s\n"
+            "BatterySaverMode: %s\n",
             boolToString(mHintManager->IsRunning()),
-            boolToString(mSustainedPerfModeOn)));
+            boolToString(mSustainedPerfModeOn),
+            boolToString(mBatterySaverOn)));
     // Dump nodes through libperfmgr
     mHintManager->DumpToFd(fd);
     if (!::android::base::WriteStringToFd(buf, fd)) {
