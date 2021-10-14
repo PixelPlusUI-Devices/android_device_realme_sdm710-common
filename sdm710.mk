@@ -172,7 +172,6 @@ PRODUCT_PACKAGES += \
     init.qcom.sensors.sh \
     init.qcom.sh \
     init.qcom.usb.sh \
-    init.qti.fm.sh \
     init.qti.ims.sh \
     init.qti.chg_policy.sh \
     init.qti.qseecomd.sh \
@@ -238,7 +237,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.realme_sdm710
 
-# Freeform Multiwindow
+# FM
+PRODUCT_PACKAGES += \
+    FM2 \
+    qcom.fmradio
+
+# Freeform MultiWindow
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml
 
