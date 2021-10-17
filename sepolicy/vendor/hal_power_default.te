@@ -19,6 +19,11 @@ allow hal_power_default system_server:process setsched;
 
 set_prop(hal_power_default, vendor_power_prop)
 
+typeattribute hal_power_default mlstrustedsubject;
+
+allow hal_power_default appdomain:process { getsched setsched };
+allow hal_power_default self:capability sys_nice;
+
 allow hal_power_default proc:file { open };
 allow hal_power_default proc:file { write };
 allow hal_power_default device_latency:chr_file { write };
