@@ -15,6 +15,7 @@ allow hal_power_default { sysfs_devfreq sysfs_kgsl }:dir search;
 allow hal_power_default { sysfs_devfreq sysfs_kgsl }:{ file lnk_file } rw_file_perms;
 allow hal_power_default sysfs_devices_system_cpu:file rw_file_perms;
 allow hal_power_default hal_power_default:capability sys_admin;
+allow hal_power_default system_server:process setsched;
 
 set_prop(hal_power_default, vendor_power_prop)
 
