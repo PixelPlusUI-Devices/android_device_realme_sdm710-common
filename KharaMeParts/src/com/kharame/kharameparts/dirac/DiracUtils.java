@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kharame.kharamedirac;
+package com.kharame.kharameparts.dirac;
 
 import android.content.Context;
 import android.content.Intent;
