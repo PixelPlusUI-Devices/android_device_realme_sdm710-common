@@ -36,5 +36,8 @@
     <!-- Allow devices override audio panel location to the left side -->
     <bool name="config_audioPanelOnLeftSide">true</bool>
 
+    <!-- The battery current divider, our kernel reports current value in µA. -->
+    <integer name="config_battCurrentDivider" translatable="false">1000</integer>
+
 </resources>
 
