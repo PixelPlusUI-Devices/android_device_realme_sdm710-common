@@ -20,5 +20,6 @@ allow init update_engine_exec:process { sigkill transition };
 allow init hwservicemanager:binder { call transfer };
 allow init vfat:dir search;
 allow init iorapd_data_file:file getattr;
+allow init proc_touchpanel:file { write open };
 
 set_prop(init, vendor_power_prop)
