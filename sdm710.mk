@@ -188,7 +188,6 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.rc \
     init.target.rc \
     ueventd.qcom.rc \
-    apex_metadata.rc
 
 # Crypto
 PRODUCT_PROPERTY_OVERRIDES += \
