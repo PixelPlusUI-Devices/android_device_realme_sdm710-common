@@ -16,7 +16,6 @@ allow vendor_init system_data_file:lnk_file { create };
 allow vendor_init wifi_data_file:dir { getattr };
 allow vendor_init proc:file w_file_perms;
 allow vendor_init proc_sched:file write;
-allow vendor_init apex_metadata_file:dir create_dir_perms;
 
 get_prop(vendor_init, oppo_debug_prop)
 get_prop(vendor_init, persist_debug_prop)
