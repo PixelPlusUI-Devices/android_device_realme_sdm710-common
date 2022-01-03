@@ -129,6 +129,8 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
         case Mode::LOW_POWER:
             {
             sysfs_write("/sys/module/battery_saver/parameters/enabled", enabled ? "Y" : "N");
+            sysfs_write("/sys/devices/system/cpu/cpufreq/policy0/scaling_governor", enabled ? "energy_dcfc" : "schedutil");
+            sysfs_write("/sys/devices/system/cpu/cpufreq/policy6/scaling_governor", enabled ? "energy_dcfc" : "schedutil");
             if (enabled) {
                 endAllHints(mHintManager);
                 mHintManager->DoHint("LOW_POWER");
