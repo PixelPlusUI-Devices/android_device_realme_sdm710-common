@@ -19,3 +19,13 @@ dontaudit rild vendor_file:file ioctl;
 # Apps are no longer allowed open access to /dev/ashmem, unless they
 # target API level < Q.
 dontaudit untrusted_app ashmem_device:chr_file open;
+
+# default prop
+dontaudit {
+  hal_audio_default
+  hal_camera_default
+  hal_neuralnetworks_default
+} default_prop:file r_file_perms;
+
+# radio prop
+dontaudit hal_camera_default radio_prop:file read;
